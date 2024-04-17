@@ -17,7 +17,7 @@ export type PodcastsObj = {
 };
 
 export type PodcastsData = {
-    podcastsList?: any;
+    podcastsList?: any[];
     podcastsDetail?: any,
 };
 

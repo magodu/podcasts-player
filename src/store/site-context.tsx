@@ -16,7 +16,7 @@ export const SiteContext = React.createContext<SiteContextObj>({
 const SiteContextProvider: React.FC<InputProps> = ( props ) => {
     const [ data, setData ] = useState<PodcastsData>({});
     const [ loading, setLoading ] = useState<boolean>(false);
-    const { error, sendRequest: fetchData } = useHttp();
+    const { isLoading, error, sendRequest: fetchData } = useHttp();
     const [ errorLoading, setErrorLoading ] = useState<boolean>(false);
 
     const getError = useCallback(() => {
@@ -41,12 +41,12 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
                 };
                 podcasts.push(podcast);
             });
-            console.log('podcasts', podcasts);
+
             setData((prevState: PodcastsData) => ({ ...prevState, podcastsList: podcasts }));
 
             setLoading(false);
         };
-        console.log('Get Podcasts');
+
         fetchData({
                 url: `https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json`
             },
@@ -61,6 +61,10 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
 
     }, [getData, getError]);
 
+    useEffect(() => {
+        setLoading(isLoading);
+
+    }, [isLoading]);
 
     const setDataHandler = (data: any) => {
         setData(data);
