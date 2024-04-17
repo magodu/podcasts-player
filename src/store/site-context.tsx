@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 import useHttp from 'src/hooks/useHttp';
 
@@ -29,31 +29,30 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
         }
     }, [error]);
 
-    const getData = useCallback(() => {
+    const getData = useCallback(async() => {
+        let podcasts: PodcastsObj[] = [];
         setLoading(true);
-        const transformData = (response: any) => {
+        try {
+            const response = await fetchData({ url: PODCASTS_URI });
             let podcasts: PodcastsObj[] = [];
             response?.feed?.entry.forEach((p: any) => {
                 let podcast = {
-                  id: p.id.attributes["im:id"],
-                  img: p["im:image"][2].label,
-                  name: p["im:name"].label,
-                  author: p["im:artist"].label,
-                  summary: p.summary ? p.summary.label : "No description"
+                    id: p.id.attributes["im:id"],
+                    img: p["im:image"][2].label,
+                    name: p["im:name"].label,
+                    author: p["im:artist"].label,
+                    summary: p.summary ? p.summary.label : "No description"
                 };
                 podcasts.push(podcast);
             });
 
             setData((prevState: PodcastsData) => ({ ...prevState, podcastsList: podcasts }));
-
             setLoading(false);
-        };
 
-        fetchData({
-                url: PODCASTS_URI
-            },
-            transformData
-        );
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+        }
 
     }, [fetchData]);
 
