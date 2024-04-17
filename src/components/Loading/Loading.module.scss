@@ -1,0 +1,25 @@
+@import 'src/scss/_variables';
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 999;
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        position: fixed;
+
+        .spinner-color {
+            color: $spinner-color;
+        }
+    }
+}

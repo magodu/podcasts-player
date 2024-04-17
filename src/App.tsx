@@ -1,14 +1,20 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
+import SiteContextProvider from 'src/store/site-context';
+
+import AppRoutes from 'src/AppRoutes';
 
 function App() {
 
     return (
-        <div>
-            <h1>
-                Podcasts project
-            </h1>  
-        </div>
+        <BrowserRouter>
+            <SiteContextProvider>
+                {/* <Layout> */}
+                    <AppRoutes />
+                {/*  </Layout> */}
+            </SiteContextProvider>
+        </BrowserRouter>
     );
 }
 
