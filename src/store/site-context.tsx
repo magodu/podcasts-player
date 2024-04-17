@@ -5,6 +5,8 @@ import useHttp from 'src/hooks/useHttp';
 import { InputProps, SiteContextObj, PodcastsData, PodcastsObj } from 'src/models/appTypes';
 
 
+const PODCASTS_URI = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json';
+
 export const SiteContext = React.createContext<SiteContextObj>({
     data: {},
     isLoading: false,
@@ -48,7 +50,7 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
         };
 
         fetchData({
-                url: `https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json`
+                url: PODCASTS_URI
             },
             transformData
         );
