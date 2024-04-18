@@ -13,7 +13,6 @@ const PodcastEpisodeDetail: React.FC = () => {
     const getEpisode = useCallback(async () => {
         const episode = data.podcastsDetail ? data.podcastsDetail[podcastId!].episodes.find((episode: any) => episode.id.toString() === episodeId) : {};
         setEpisode(episode);
-        console.log('episode', episodeId, episode)
     }, []);
 
     useEffect(() => {
@@ -23,17 +22,21 @@ const PodcastEpisodeDetail: React.FC = () => {
 
     return (
         <Segment>
-            <h2>{episode.title}</h2>
-            <div dangerouslySetInnerHTML={{__html: episode.content}} /> {/* TODO: sanitize this */}
-            <div className="ui divider" />
-            <div className="ui column centered grid padded">
-            <audio controls>
-                <source src={episode.url} type="audio/ogg" />
-                <source src={episode.url} type="audio/mpeg" />
-                <source src={episode.url} type="audio/mp3" />
-                Your browser does not support the audio element.
-            </audio>
-            </div>
+            {episode && (
+                <>
+                    <h2>{episode?.title}</h2>
+                    <div dangerouslySetInnerHTML={{__html: episode?.content}} /> {/* TODO: sanitize this */}
+                    <div className="ui divider" />
+                    <div className="ui column centered grid padded">
+                        <audio controls>
+                            <source src={episode?.url} type="audio/ogg" />
+                            <source src={episode?.url} type="audio/mpeg" />
+                            <source src={episode?.url} type="audio/mp3" />
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </>
+            )}
         </Segment>
     );
 };
