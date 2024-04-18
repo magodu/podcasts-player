@@ -1,0 +1,30 @@
+.image {
+    width: 75%;
+    margin: 0 auto;
+
+    img {
+        border-radius: 10px;
+    }
+}
+
+.info-name {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #CCC;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.info-artist {
+    display: block;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    width: 100%;
+}
+
+.info-description {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    overflow-wrap: break-word;
+}

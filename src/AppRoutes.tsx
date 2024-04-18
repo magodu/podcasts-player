@@ -1,6 +1,6 @@
 
 import { lazy, Suspense } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import Loading from 'src/components/Loading/Loading';
 import NotFound from 'src/pages/NotFound/NotFound';
@@ -8,6 +8,8 @@ import NotFound from 'src/pages/NotFound/NotFound';
 const Home = lazy(() => import('src/pages/Home/Home'));
 const PodcastDetail = lazy(() => import('src/pages/PodcastDetail/PodcastDetail'));
 const PodcastEpisodeDetail = lazy(() => import('src/pages/PodcastEpisodeDetail/PodcastEpisodeDetail'));
+const EpisodesList = lazy(() => import('src/components/EpisodesList/EpisodesList'));
+
 
 const AppRoutes = () => {
 
@@ -28,7 +30,10 @@ const AppRoutes = () => {
                         <PodcastDetail />
                     </Suspense>
                 }
-            />
+            >
+                <Route index element={<EpisodesList />} />
+                <Route path="episode/:episodeId" element={<PodcastEpisodeDetail />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
