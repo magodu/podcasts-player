@@ -14,7 +14,6 @@ const EpisodesList: React.FC = () => {
                     <Placeholder>
                         <Placeholder.Header>
                             <Placeholder.Line />
-                            <Placeholder.Line />
                         </Placeholder.Header>
                     </Placeholder>
                 ) : (
