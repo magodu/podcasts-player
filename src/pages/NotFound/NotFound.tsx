@@ -1,4 +1,5 @@
-const NotFound = () => {
+const NotFound: React.FC = () => {
+
     return (
         <div className="page-wrap d-flex flex-row align-items-center mt-5">
             <div className="container">
