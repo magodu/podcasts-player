@@ -25,12 +25,28 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.ui.loader {
+    &:after {
+        border-color: $spinner-color transparent transparent;
+    }
+}
+
+.ui.secondary.pointing.menu .item {
+    border-bottom-color: transparent;
+    border-bottom-style: unset;
+    border-bottom-width: unset;
+}
 
 .ui.cards a.card:hover, .ui.link.card:hover, .ui.link.cards .card:hover, a.ui.card:hover {
     transform: translateY(0);
 }
 
-a {
-    color: #4183c4;
-    text-decoration: none;
+.ui.segment, .ui.table, .ui.card {
+    box-shadow: 1px 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.ui.pagination.menu .active.item {
+    background-color: $active-page-bgcolor;
+    color: white;
+    border-radius: 5px;
 }
