@@ -1,19 +1,32 @@
 export interface localStorageDataType {
-    token: string;
-    expirationTime: string;
-    loginData: any;
-    infoResultPayload: any;
-    playerData: any;
-    playerStatistics: any;
-    catalog: any;
+    data: any;
 };
 
-export type PodcastsObj = {
+export type PodcastsType = {    // TODO: CHANGE Obj for Type
     id: string;
     img: string;
     name: string;
     author: string;
     summary: string;
+};
+
+export type EpisodeType = {
+    id: string;
+    title: string;
+    date: string;
+    duration: string;
+    content: string;
+    url: string;
+};
+
+export type PodcastDetailType = {
+    id: string;
+    artwork: string;
+    name: string;
+    feedUrl: string;
+    artistName: string;
+    episodes?: EpisodeType[];
+    description?: string;
 };
 
 export type PodcastsData = {
@@ -25,9 +38,11 @@ export type SiteContextObj = {
     data: PodcastsData;
     isLoading: boolean,
     errorLoading: boolean,
-    setData: (data: any) => void;
+    setData: (data: any) => void; 
+    setLoading: (isLoading: boolean) => void; 
 };
 
 export interface InputProps {
     children: React.ReactElement;
 }
+
