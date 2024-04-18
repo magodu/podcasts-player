@@ -1,23 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Grid, Label, Segment, Placeholder } from 'semantic-ui-react';
 
 import PodcastItem from 'src/components/PodcastItem/PodcastItem';
 
-import { SiteContext } from 'src/store/site-context';
+import { useSiteContext } from 'src/store/site-context';
 
-import { PodcastsObj } from 'src/models/appTypes';
+import { PodcastsType } from 'src/models/appTypes';
 
 import classes from 'src/pages/Home/Home.module.scss';
 
 const Home: React.FC = () => {
     const [searchText, setSearchText] = useState<string>('');
-    const { isLoading, data } = useContext(SiteContext);
+    const { isLoading, data } = useSiteContext();
+    const dummyArray = new Array(16).fill(0);
 
     const filterData = () => {
-        let results: PodcastsObj[] = data.podcastsList?.length! > 0 ? [...data.podcastsList!] : []; 
+        let results: PodcastsType[] = data.podcastsList?.length! > 0 ? [...data.podcastsList!] : []; 
 
         if (searchText.length > 0) {
-            results = results.filter((item: PodcastsObj) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.author.toLowerCase().includes(searchText.toLowerCase()));
+            results = results.filter((item: PodcastsType) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.author.toLowerCase().includes(searchText.toLowerCase()));
         }
 
         return results;
@@ -35,53 +36,68 @@ const Home: React.FC = () => {
         }
     };
 
-
     return (
-        <>
-            {!isLoading && (
-                <Segment textAlign="right" className={classes['podcast-no-border']}>
-                    <Label color="blue" size="large">
-                        {filteredData.length}
-                    </Label>
-                    <div className="ui icon focus input">
-                        <i className="search icon" />
-                            <input
-                                type="text"
-                                placeholder="Filter podcasts..."
-                                name="filter"
-                                autoComplete="off"
-                                onChange={(event) => searchTextChange(event)}
-                            />
-                    </div> 
-                </Segment>
+        <React.Fragment>
+            {isLoading && (
+                <>
+                    <Segment className={classes['podcast-no-border']}>
+                        <Placeholder>
+                            <Placeholder.Header>
+                                <Placeholder.Line />
+                            </Placeholder.Header>
+                        </Placeholder>
+                    </Segment>
+                    <Grid columns={4} padded>
+                        {dummyArray.map((item, index) => {
+                            return (
+                                <Grid.Column width={4} key={index}>
+                                    <Segment raised>
+                                        <Placeholder >
+                                            <Placeholder.Image style={{ height: '100px', width: '100%' }}/>
+                                            <Placeholder.Paragraph>
+                                                <Placeholder.Line length="medium" />
+                                                <Placeholder.Line length="short" />
+                                            </Placeholder.Paragraph>
+                                        </Placeholder>
+                                    </Segment>
+                                </Grid.Column>
+                            );
+                        })}
+                    </Grid>
+                </>
             )}
 
-            <Grid columns={4} padded>
-                {filteredData.map((podcast) => {
-                    return (
-                        <Grid.Column width={4} key={podcast.id}>
-                            {isLoading ? (
-                                <Segment raised>
-                                    <Placeholder>
-                                        <Placeholder.Header image>
-                                            <Placeholder.Line />
-                                            <Placeholder.Line />
-                                        </Placeholder.Header>
-                                        <Placeholder.Paragraph>
-                                            <Placeholder.Line length="medium" />
-                                            <Placeholder.Line length="short" />
-                                        </Placeholder.Paragraph>
-                                    </Placeholder>
-                                </Segment>
-                            ) : (
-                                <PodcastItem podcast={podcast} />
-                            )}
-                        </Grid.Column>
-                    );
-                })}
-                {filteredData.length === 0 && searchText.length > 0 && <div className={classes['no-results']}>No results for this search text: {searchText}.</div>}
-            </Grid>
-        </>
+            {!isLoading && (
+                <>
+                    <Segment textAlign="right" className={classes['podcast-no-border']}>
+                        <Label color="blue" size="large">
+                            {filteredData.length}
+                        </Label>
+                        <div className="ui icon focus input">
+                            <i className="search icon" />
+                                <input
+                                    type="text"
+                                    placeholder="Filter podcasts..."
+                                    name="filter"
+                                    autoComplete="off"
+                                    onChange={(event) => searchTextChange(event)}
+                                />
+                        </div> 
+                    </Segment>
+
+                    <Grid columns={4} padded>
+                        {filteredData.map((podcast) => {
+                            return (
+                                <Grid.Column width={4} key={podcast.id}>
+                                    <PodcastItem podcast={podcast} />
+                                </Grid.Column>
+                            );
+                        })} 
+                        {filteredData.length === 0 && searchText.length > 0 && <div className={classes['no-results']}>No results for this search text: {searchText}.</div>}
+                    </Grid>
+                </>
+            )}
+        </React.Fragment>
     );
 };
 

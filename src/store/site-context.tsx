@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 import useHttp from 'src/hooks/useHttp';
 
-import { InputProps, SiteContextObj, PodcastsData, PodcastsObj } from 'src/models/appTypes';
+import { InputProps, SiteContextObj, PodcastsData, PodcastsType } from 'src/models/appTypes';
 
 
 const PODCASTS_URI = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json';
@@ -11,7 +11,8 @@ export const SiteContext = React.createContext<SiteContextObj>({
     data: {},
     isLoading: false,
     errorLoading: false,
-    setData: (data: PodcastsData) => {}
+    setData: (data: PodcastsData) => {},
+    setLoading: (isLoading: boolean) => {}
 } as SiteContextObj);
 
 
@@ -30,11 +31,11 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
     }, [error]);
 
     const getData = useCallback(async() => {
-        let podcasts: PodcastsObj[] = [];
+        let podcasts: PodcastsType[] = [];
         setLoading(true);
         try {
             const response = await fetchData({ url: PODCASTS_URI });
-            let podcasts: PodcastsObj[] = [];
+            let podcasts: PodcastsType[] = [];
             response?.feed?.entry.forEach((p: any) => {
                 let podcast = {
                     id: p.id.attributes["im:id"],
@@ -67,6 +68,10 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
 
     }, [isLoading]);
 
+    const setLoadingHandler = (isLoading: boolean) => {
+        setLoading(isLoading);
+    };
+
     const setDataHandler = (data: any) => {
         setData(data);
     };
@@ -75,7 +80,8 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
         data: data,
         isLoading: loading,
         errorLoading: errorLoading,
-        setData: setDataHandler
+        setData: setDataHandler,
+        setLoading: setLoadingHandler
     };
 
     return <SiteContext.Provider value={contextValue}>
@@ -85,4 +91,13 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
 
 export default SiteContextProvider;
 
-export const useSiteContext = () => useContext(SiteContext);
+export const useSiteContext = () => {
+    const context = useContext(SiteContext);
+    if (!context) {
+        throw new Error(
+            'useSiteContext must be used within a SiteContextProvider'
+        );
+    }
+
+    return context;
+}

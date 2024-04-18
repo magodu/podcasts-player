@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
 import { Segment } from "semantic-ui-react";
 
-import { SiteContext } from 'src/store/site-context';
-
+import { useSiteContext } from 'src/store/site-context';
+import { EpisodeType } from 'src/models/appTypes';
 
 const PodcastEpisodeDetail: React.FC = () => {
     const { podcastId, episodeId } = useParams();
-    const [episode, setEpisode] = useState<any>(null);  // TODO: add type
-    const { data } = useContext(SiteContext);
+    const [episode, setEpisode] = useState<EpisodeType | null>(null);
+    const { data } = useSiteContext();
 
     const getEpisode = useCallback(async () => {
         const episode = data.podcastsDetail ? data.podcastsDetail[podcastId!].episodes.find((episode: any) => episode.id.toString() === episodeId) : {};

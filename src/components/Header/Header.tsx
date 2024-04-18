@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
 import { Menu, Loader } from "semantic-ui-react";
 
-import { SiteContext } from 'src/store/site-context';
+import { useSiteContext } from 'src/store/site-context';
 
 import classes from 'src/components/Header/Header.module.scss';
 
 const Header: React.FC = () => {
-    const { isLoading } = useContext(SiteContext);
+    const { isLoading } = useSiteContext();
 
     return (
         <Menu secondary pointing>
