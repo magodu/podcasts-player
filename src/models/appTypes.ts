@@ -1,8 +1,4 @@
-export interface localStorageDataType {
-    data: any;
-};
-
-export type PodcastsType = {    // TODO: CHANGE Obj for Type
+export type PodcastsType = {
     id: string;
     img: string;
     name: string;
@@ -27,19 +23,30 @@ export type PodcastDetailType = {
     artistName: string;
     episodes?: EpisodeType[];
     description?: string;
+    podcastTimestamp?: number;
 };
 
 export type PodcastsData = {
-    podcastsList?: any[];
-    podcastsDetail?: any,
+    podcastsList?: PodcastsType[];
+    podcastsDetail?: { [key: string]: PodcastDetailType };
 };
 
-export type SiteContextObj = {
+export type SiteContextType = {
     data: PodcastsData;
     isLoading: boolean,
     errorLoading: boolean,
     setData: (data: any) => void; 
     setLoading: (isLoading: boolean) => void; 
+};
+
+export type LSDataType = { 
+    podcastsList?: any;
+    podcastsDetail?: any,
+    podcastsListTimestamp?: number;
+};
+
+export interface localStorageDataType {
+    data: LSDataType;
 };
 
 export interface InputProps {

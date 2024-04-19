@@ -1,25 +1,27 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 import useHttp from 'src/hooks/useHttp';
+import useLocalStorage from 'src/hooks/useLocalStorage';
 
-import { InputProps, SiteContextObj, PodcastsData, PodcastsType } from 'src/models/appTypes';
+import { InputProps, SiteContextType, PodcastsData, PodcastsType, localStorageDataType } from 'src/models/appTypes';
 
+import { isOutdated } from 'src/utils';
+import { PODCASTS_URI, LOCAL_STORAGE_KEY } from 'src/constants';
 
-const PODCASTS_URI = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json';
-
-export const SiteContext = React.createContext<SiteContextObj>({
+export const SiteContext = React.createContext<SiteContextType>({
     data: {},
     isLoading: false,
     errorLoading: false,
     setData: (data: PodcastsData) => {},
     setLoading: (isLoading: boolean) => {}
-} as SiteContextObj);
+} as SiteContextType);
 
 
 const SiteContextProvider: React.FC<InputProps> = ( props ) => {
     const [ data, setData ] = useState<PodcastsData>({});
     const [ loading, setLoading ] = useState<boolean>(false);
     const { isLoading, error, sendRequest: fetchData } = useHttp();
+    const [ localStorageData, setLocalStorageData ] = useLocalStorage<localStorageDataType>(LOCAL_STORAGE_KEY);
     const [ errorLoading, setErrorLoading ] = useState<boolean>(false);
 
     const getError = useCallback(() => {
@@ -30,12 +32,19 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
         }
     }, [error]);
 
+    const storeDataLocalStorage = useCallback((data: PodcastsType[]) => {
+        setLocalStorageData((prevState: PodcastsData) => ({
+            ...prevState,
+            podcastsList: data,
+            podcastsListTimestamp: new Date().getTime()
+        }));
+    }, [setLocalStorageData]);
+
     const getData = useCallback(async() => {
         let podcasts: PodcastsType[] = [];
         setLoading(true);
         try {
             const response = await fetchData({ url: PODCASTS_URI });
-            let podcasts: PodcastsType[] = [];
             response?.feed?.entry.forEach((p: any) => {
                 let podcast = {
                     id: p.id.attributes["im:id"],
@@ -48,6 +57,8 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
             });
 
             setData((prevState: PodcastsData) => ({ ...prevState, podcastsList: podcasts }));
+            storeDataLocalStorage(podcasts);
+
             setLoading(false);
 
         } catch (error) {
@@ -55,28 +66,42 @@ const SiteContextProvider: React.FC<InputProps> = ( props ) => {
             setLoading(false);
         }
 
-    }, [fetchData]);
+    }, [fetchData, storeDataLocalStorage]);
 
     useEffect(() => {
-       getData();
-       getError();
+        const hasDataLocalStorageData = () => {
+            if (localStorageData) {
+                const podcastsListTimestamp = localStorageData.podcastsListTimestamp;
+                return (localStorageData.podcastsListTimestamp && localStorageData.podcastsList) || !isOutdated(podcastsListTimestamp);
+            } else {
+                return false;
+            }
+        }
 
-    }, [getData, getError]);
+        if (hasDataLocalStorageData()) {
+            setData((prevState: PodcastsData) => ({ ...prevState, podcastsList: localStorageData.podcastsList, podcastsListTimestamp: localStorageData.podcastsListTimestamp }));
+        } else {
+            getData();
+        }
+       
+        getError();
+
+    }, [getData, getError, localStorageData]);
 
     useEffect(() => {
         setLoading(isLoading);
 
     }, [isLoading]);
 
-    const setLoadingHandler = (isLoading: boolean) => {
+    const setLoadingHandler = useCallback((isLoading: boolean) => {
         setLoading(isLoading);
-    };
+    }, []);
 
-    const setDataHandler = (data: any) => {
+    const setDataHandler = useCallback((data: any) => {
         setData(data);
-    };
+    }, []);
 
-    const contextValue: SiteContextObj = {
+    const contextValue: SiteContextType = {
         data: data,
         isLoading: loading,
         errorLoading: errorLoading,

@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { Card, Image } from 'semantic-ui-react';
 
-import { useSiteContext } from 'src/store/site-context';
-
 import classes from 'src/components/PodcastItem/PodcastItem.module.scss';
 
 import { PodcastsType } from 'src/models/appTypes';
@@ -14,7 +12,6 @@ interface PodcastItemProps {
 }
 
 const PodcastItem: React.FC<PodcastItemProps> = ({ podcast }) => {
-    const { isLoading } = useSiteContext();
 
     return (
         <Link to={`/podcast/${podcast.id}`}>
