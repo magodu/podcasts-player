@@ -2,8 +2,7 @@ import { useState, useCallback } from 'react';
 import axios from 'axios';
 
 import { useSiteContext } from 'src/store/site-context';
-
-const CORS_PROXY = "https://api.allorigins.win/get?url=";
+import { CORS_PROXY } from 'src/constants';
 
 const useHttp = () => {
     const [isLoading, setIsLoading] = useState(false);
