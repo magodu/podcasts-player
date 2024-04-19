@@ -38,7 +38,7 @@ const Home: React.FC = () => {
 
     return (
         <React.Fragment>
-            {isLoading && (
+            {isLoading ? (
                 <>
                     <Segment className={classes['podcast-no-border']}>
                         <Placeholder>
@@ -65,9 +65,8 @@ const Home: React.FC = () => {
                         })}
                     </Grid>
                 </>
-            )}
-
-            {!isLoading && (
+            ) :
+            (
                 <>
                     <Segment textAlign="right" className={classes['podcast-no-border']}>
                         <Label color="blue" size="large">
