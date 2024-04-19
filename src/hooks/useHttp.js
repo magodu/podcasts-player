@@ -30,7 +30,7 @@ const useHttp = () => {
             setIsLoading(false);
             setLoading(false); // Context Loading
         }
-    }, []);
+    }, [setLoading]);
 
     return {
         isLoading,
