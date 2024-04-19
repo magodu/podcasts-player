@@ -25,7 +25,7 @@ const EpisodesTable: React.FC<EpisodesTableProps> = ({ episodes }) => {
 
     return (
         <>
-            <Table celled padded>
+            <Table padded>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell width={8}>Title</Table.HeaderCell>

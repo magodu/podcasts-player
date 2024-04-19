@@ -50,3 +50,16 @@ body {
     color: white;
     border-radius: 5px;
 }
+
+.ui.table {
+    tr {
+
+        &:nth-child(odd) {
+            background-color: #e6e6e6;
+        }
+
+        td {
+            border-top: unset;
+        }
+    }
+}
