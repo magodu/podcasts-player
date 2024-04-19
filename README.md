@@ -1,6 +1,36 @@
-# Getting Started with Create React App
+# Podcasts player app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project has a SPA application to hear podcasts coded in React v18. There are 2 execution modes: development and production mode. 
+
+## How to install
+
+Git and a package manager shuch as npm should ne installed first.
+
+### Clone repo
+
+In a terminal move to the chosen directory to allocate the project and execute `git clone git@github.com:magodu/podcasts-player.git`
+
+### Install dependencies
+
+Move to chosen directory and install its dependencies with the command `npm install`.
+
+## Application running
+
+Once all dependencies are installed you can run the project in two modes:
+
+### Development mode
+
+Assets are not minified. Execute in a terminal `npm start` in the project folder.
+
+
+### Production mode
+
+Assets are minified and concatenated. Execute in a terminal `npm build` in the project folder.
+This command uilds the app for production to the `build` folder. The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
 
 ## Available Scripts
 
