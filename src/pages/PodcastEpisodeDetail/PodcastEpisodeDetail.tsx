@@ -11,9 +11,9 @@ const PodcastEpisodeDetail: React.FC = () => {
     const { data } = useSiteContext();
 
     const getEpisode = useCallback(async () => {
-        const episode = data.podcastsDetail ? data.podcastsDetail[podcastId!].episodes.find((episode: any) => episode.id.toString() === episodeId) : {};
-        setEpisode(episode);
-    }, []);
+        const episode = data?.podcastsDetail ? data.podcastsDetail[podcastId!].episodes?.find((episode: any) => episode.id.toString() === episodeId) : null;
+        setEpisode(episode!);
+    }, [podcastId, episodeId, data.podcastsDetail]);
 
     useEffect(() => {
         getEpisode();
