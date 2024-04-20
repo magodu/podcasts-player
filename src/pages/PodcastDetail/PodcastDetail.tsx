@@ -32,9 +32,29 @@ const PodcastDetail: React.FC = () => {
         }));
     }, [setLocalStorageData]);
 
+    const getEpisodes = useCallback(async () => {
+        const episodeUri = PODCASTS_EPISODES_URI.replace(/PODCAST_ID/, podcastId!);
+        let episodes: EpisodeType[] = [];
+        const episodesResponse = await fetchData({ url: episodeUri });
+        const [itemTrack, ...items] = episodesResponse.results;
+
+        items.forEach((episode: any) => {
+            episodes.push({
+                id: episode.trackId,
+                title: episode.trackName,
+                date: episode.releaseDate,
+                duration: episode.trackTimeMillis ? msToTime(episode.trackTimeMillis) : '-',
+                content: episode.description,
+                url: episode.episodeUrl
+            });
+        });
+
+        return episodes;
+    }, [fetchData, podcastId]);
+
     const getDetail = useCallback(async () => {
         const detailUri = PODCASTS_DETAIL_URI.replace(/PODCAST_ID/, podcastId!);
-        const episodeUri = PODCASTS_EPISODES_URI.replace(/PODCAST_ID/, podcastId!);
+
         try {
             const response = await fetchData({ url: detailUri });
             const p = response.results[0];
@@ -45,22 +65,10 @@ const PodcastDetail: React.FC = () => {
                 feedUrl: p.feedUrl,
                 artistName: p.artistName
             };
-            let episodes: EpisodeType[] = [];
 
-            const episodesResponse = await fetchData({ url: episodeUri });
-            const [itemTrack, ...items] = episodesResponse.results;
-
-            items.forEach((episode: any) => {
-                episodes.push({
-                    id: episode.trackId,
-                    title: episode.trackName,
-                    date: episode.releaseDate,
-                    duration: episode.trackTimeMillis ? msToTime(episode.trackTimeMillis) : '-',
-                    content: episode.description,
-                    url: episode.episodeUrl
-                });
-            });
+            let episodes: EpisodeType[] = await getEpisodes();
             podcastDetail.episodes = episodes;
+
             const podcastItem = data.podcastsList?.find((podcast: any) => podcast.id === podcastId);
             podcastDetail.description = podcastItem?.summary;
 
@@ -78,7 +86,7 @@ const PodcastDetail: React.FC = () => {
             console.error('Podcast not found', error);
 
         }
-    }, [fetchData, podcastId, storeDataLocalStorage, data.podcastsList, setData]);
+    }, [fetchData, podcastId, storeDataLocalStorage, data.podcastsList, setData, getEpisodes]);
 
     useEffect(() => {
         const hasDataLocalStorageData = () => {
