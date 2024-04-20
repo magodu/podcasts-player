@@ -51,14 +51,14 @@ const PodcastDetail: React.FC = () => {
             const [itemTrack, ...items] = episodesResponse.results;
 
             items.forEach((episode: any) => {
-              episodes.push({
-                id: episode.trackId,
-                title: episode.trackName,
-                date: episode.releaseDate,
-                duration: episode.trackTimeMillis ? msToTime(episode.trackTimeMillis) : '-',
-                content: episode.description,
-                url: episode.episodeUrl
-              });
+                episodes.push({
+                    id: episode.trackId,
+                    title: episode.trackName,
+                    date: episode.releaseDate,
+                    duration: episode.trackTimeMillis ? msToTime(episode.trackTimeMillis) : '-',
+                    content: episode.description,
+                    url: episode.episodeUrl
+                });
             });
             podcastDetail.episodes = episodes;
             const podcastItem = data.podcastsList?.find((podcast: any) => podcast.id === podcastId);
@@ -109,20 +109,20 @@ const PodcastDetail: React.FC = () => {
         <>
             { error ? (<h2>Something went wrong. Please check the console.</h2>)
             : (
-                    <Grid>
-                        <Grid.Column width={4}>
-                            {isLoading ? (
-                                <Placeholder>
-                                    <Placeholder.Image square />
-                                </Placeholder>
-                            ) : (
-                                <PodcastInfo podcast={podcast} />
-                            )}
-                        </Grid.Column>
-                        <Grid.Column width={12}>
-                            <Outlet context={[podcast, isLoading]} />
-                        </Grid.Column>
-                    </Grid>
+                <Grid>
+                    <Grid.Column width={4}>
+                        {isLoading ? (
+                            <Placeholder>
+                                <Placeholder.Image square />
+                            </Placeholder>
+                        ) : (
+                            <PodcastInfo podcast={podcast} />
+                        )}
+                    </Grid.Column>
+                    <Grid.Column width={12}>
+                        <Outlet context={[podcast, isLoading]} />
+                    </Grid.Column>
+                </Grid>
                 )
             }
         </>
