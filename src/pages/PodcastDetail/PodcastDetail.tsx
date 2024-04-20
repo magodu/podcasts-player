@@ -103,7 +103,7 @@ const PodcastDetail: React.FC = () => {
             getDetail();
         }
 
-    }, [getDetail, localStorageData.podcastsDetail, podcastId, setData]);
+    }, [getDetail, localStorageData?.podcastsDetail, podcastId, setData]);
 
     if (error) {
         return <h2>Something went wrong. Please check the console.</h2>;
