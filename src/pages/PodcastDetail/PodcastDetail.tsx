@@ -105,26 +105,27 @@ const PodcastDetail: React.FC = () => {
 
     }, [getDetail, localStorageData?.podcastsDetail, podcastId, setData]);
 
-    if (error) {
-        return <h2>Something went wrong. Please check the console.</h2>;
-    }
-
     return (
-
-        <Grid>
-            <Grid.Column width={4}>
-                {isLoading ? (
-                    <Placeholder>
-                        <Placeholder.Image square />
-                    </Placeholder>
-                ) : (
-                    <PodcastInfo podcast={podcast} />
-                )}
-            </Grid.Column>
-            <Grid.Column width={12}>
-                <Outlet context={[podcast, isLoading]} />
-            </Grid.Column>
-        </Grid>
+        <>
+            { error ? (<h2>Something went wrong. Please check the console.</h2>)
+            : (
+                    <Grid>
+                        <Grid.Column width={4}>
+                            {isLoading ? (
+                                <Placeholder>
+                                    <Placeholder.Image square />
+                                </Placeholder>
+                            ) : (
+                                <PodcastInfo podcast={podcast} />
+                            )}
+                        </Grid.Column>
+                        <Grid.Column width={12}>
+                            <Outlet context={[podcast, isLoading]} />
+                        </Grid.Column>
+                    </Grid>
+                )
+            }
+        </>
     );
 };
 
